@@ -1,0 +1,98 @@
+{% extends 'base_home.html' %}
+
+{% block content %}
+<h1>Create Group Meeting</h1>
+
+<!-- Display success messages -->
+{% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<!-- Combined Form -->
+<form method="post" id="meeting-form">
+    {% csrf_token %}
+
+    <!-- Invitees Section -->
+    <h3>Select Invitees</h3>
+    <div>
+        <h4>Users</h4>
+        {% for user in users %}
+        <label>
+            <input type="checkbox" name="invitees" value="{{ user.id }}"> {{ user.username }}
+        </label><br>
+        {% endfor %}
+    </div>
+    <div>
+        <h4>Admins</h4>
+        {% for admin in admins %}
+        <label>
+            <input type="checkbox" name="invitees" value="{{ admin.id }}"> {{ admin.username }}
+        </label><br>
+        {% endfor %}
+    </div>
+
+    <!-- Meeting Details Pop-up -->
+    <div id="meeting-form-popup" class="popup">
+        <div class="popup-content">
+            <span class="close" onclick="closeMeetingForm()">&times;</span>
+            <h3>Meeting Details</h3>
+            {{ form.as_p }}
+            <button type="submit">Send Invites</button>
+            <button type="button" onclick="closeMeetingForm()">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Button to Open Pop-up -->
+    <button type="button" onclick="validateAndOpenForm()">Done</button>
+</form>
+
+<style>
+    .popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 20px;
+        border: 1px solid #ccc;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+    }
+    .popup-content {
+        position: relative;
+    }
+    .close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+        font-size: 20px;
+    }
+</style>
+
+<script>
+    function validateAndOpenForm() {
+        // Check if at least one checkbox is selected
+        const checkboxes = document.querySelectorAll('input[name="invitees"]:checked');
+        if (checkboxes.length === 0) {
+            alert('Please select at least one person to invite.');
+            return;
+        }
+        // Open the pop-up form if validation passes
+        openMeetingForm();
+    }
+
+    function openMeetingForm() {
+        document.getElementById('meeting-form-popup').style.display = 'block';
+    }
+
+    function closeMeetingForm() {
+        document.getElementById('meeting-form-popup').style.display = 'none';
+    }
+</script>
+{% endblock %}

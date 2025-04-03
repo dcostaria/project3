@@ -1,0 +1,93 @@
+{% extends "base_home.html" %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Recurring Event</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Custom style for smaller input boxes */
+        .small-input {
+            width: 120px; /* Adjust width as needed */
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <h3>Add Recurring Event</h3>
+    <form id="recurringTaskForm" method="POST">
+    {% csrf_token %}
+        <div class="mb-3">
+            <label for="title" class="form-label">Event Title</label>
+            <input type="text" class="form-control small-input" id="title" name="title" required>
+        </div>
+        <div class="mb-3">
+            <label for="startDate" class="form-label">Start Date</label>
+            <input type="date" class="form-control small-input" id="startDate" name="start_date" required>
+        </div>
+        <div class="mb-3">
+            <label for="endDate" class="form-label">End Date</label>
+            <input type="date" class="form-control small-input" id="endDate" name="end_date" required>
+        </div>
+        <div class="mb-3">
+            <label for="startTime" class="form-label">Start Time</label>
+            <input type="time" class="form-control small-input" id="startTime" name="start_time" required>
+        </div>
+        <div class="mb-3">
+            <label for="duration" class="form-label">Duration (hours)</label>
+            <input type="number" class="form-control small-input" id="duration" name="duration" required>
+        </div>
+        <div class="mb-3">
+            <label for="recurrence" class="form-label">Recurrence</label>
+            <select class="form-control small-input" id="recurrence" name="recurrence" required>
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Event</button>
+    </form>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script>
+    $('#recurringTaskForm').on('submit', function(e) {
+        e.preventDefault();
+
+        var title = $('#title').val();
+        var startDate = $('#startDate').val();
+        var endDate = $('#endDate').val();
+        var startTime = $('#startTime').val();
+        var duration = $('#duration').val();
+        var recurrence = $('#recurrence').val();
+
+        $.ajax({
+            type: "POST",
+            url: "{% url 'add_recurring_event' %}",
+            data: JSON.stringify({
+                'title': title,
+                'start_date': startDate,
+                'end_date': endDate,
+                'start_time': startTime,
+                'duration': duration,
+                'recurrence': recurrence
+            }),
+            contentType: "application/json",
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            success: function(response) {
+                alert("Recurring event added successfully");
+            },
+            error: function(response) {
+                alert("Error adding event");
+            }
+        });
+    });
+</script>
+{% endblock %}
+</body>
+</html>

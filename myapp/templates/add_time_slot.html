@@ -1,0 +1,214 @@
+{% extends "base_home.html" %}
+
+{% block title %}Add Time Slot{% endblock %}
+
+{% block content %}
+    <style>
+        /* Background styling */
+        body {
+            background: linear-gradient(to right, #f0f4f8, #d9e4f5);
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Container and Card Styling */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .card {
+            width: 500px;
+            padding: 24px;
+            background-color: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0e0e0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 14px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Heading Styling */
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #007bff;
+            font-weight: bold;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Form Group Styling */
+        .form-group {
+            margin-bottom: 16px;
+            width: 100%;
+        }
+
+        label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: block;
+            color: #555;
+            font-size: 16px;
+        }
+
+        /* Input Field Styling */
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 12px;
+            background-color: #f8f9fa;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        input:focus {
+            border-color: #007bff;
+            outline: none;
+            background-color: #eef4fd;
+        }
+
+        /* Row Styling */
+        .time-slot-row {
+            display: flex;
+            gap: 16px;
+        }
+
+        .time-slot-row div {
+            flex: 1;
+        }
+
+        /* Checkbox Row Styling */
+        .form-check {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 12px;
+            justify-content: flex-start;
+        }
+
+        .form-check input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #007bff;
+        }
+
+        .form-check label {
+            font-size: 14px;
+            color: #555;
+            font-weight: 500;
+            margin-bottom: 0;
+        }
+
+        /* Button Styling */
+        .btn-primary, .btn-secondary {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            margin-top: 16px;
+            border: none;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.5);
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+            box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            box-shadow: 0 6px 20px rgba(108, 117, 125, 0.5);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 576px) {
+            .card {
+                width: 100%;
+                padding: 16px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            input, .btn-primary, .btn-secondary {
+                font-size: 14px;
+            }
+        }
+    </style>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h1>Add Time Slot</h1>
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <!-- Date Row -->
+                    <div class="form-group">
+                        <label for="id_date">Date</label>
+                        {{ form.date }}
+                    </div>
+                    
+                    <!-- Start and End Time Row -->
+                    <div class="form-group time-slot-row">
+                        <div>
+                            <label for="id_start_time">Start Time</label>
+                            {{ form.start_time }}
+                        </div>
+                        <div>
+                            <label for="id_end_time">End Time</label>
+                            {{ form.end_time }}
+                        </div>
+                    </div>
+                    
+                    <!-- Title Row -->
+                    <div class="form-group">
+                        <label for="id_title">Title</label>
+                        {{ form.title }}
+                    </div>
+                    
+                    <!-- Is Booked Row -->
+                    <div class="form-check">
+                        {{ form.is_booked }}
+                        <label for="id_is_booked">Is Booked</label>
+                    </div>
+
+                    <!-- Save and View Time Slots Buttons -->
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

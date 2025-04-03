@@ -1,0 +1,42 @@
+{% extends 'base_home.html' %}
+
+{% block content %}
+<h1>Invitation to Meeting: {{ invitation.meeting.title }}</h1>
+<p>Date: {{ invitation.meeting.date }}</p>
+<p>Time: {{ invitation.meeting.start_time }} to {{ invitation.meeting.end_time }}</p>
+
+<h3>What would you like to do?</h3>
+
+<form method="post">
+    {% csrf_token %}
+    <label>
+        <input type="radio" name="status" value="Accepted" required> Accept
+    </label><br>
+
+    <label>
+        <input type="radio" name="status" value="Declined" required> Decline
+    </label><br>
+
+    <div id="decline-reason" style="display:none;">
+        <label for="decline_reason">Please provide a reason for declining:</label><br>
+        <textarea name="decline_reason" id="decline_reason_text" rows="4" cols="50"></textarea><br>
+    </div>
+
+    <button type="submit">Submit</button>
+</form>
+
+<script>
+    const declineRadio = document.querySelector('input[value="Declined"]');
+    const declineReasonDiv = document.getElementById('decline-reason');
+
+    declineRadio.addEventListener('change', function() {
+        if (this.checked) {
+            declineReasonDiv.style.display = 'block';
+        }
+    });
+
+    document.querySelector('input[value="Accepted"]').addEventListener('change', function() {
+        declineReasonDiv.style.display = 'none';
+    });
+</script>
+{% endblock %}

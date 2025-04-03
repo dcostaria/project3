@@ -1,0 +1,13 @@
+{% extends 'base_home.html' %}
+
+{% block content %}
+<h1>Respond to Invitation</h1>
+<p>Meeting: {{ invitation.meeting.title }}</p>
+<p>Date: {{ invitation.meeting.date }} at {{ invitation.meeting.start_time }}</p>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit Response</button>
+</form>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'base_home.html' %}
+
+{% block content %}
+<h1>Meeting Invitation</h1>
+
+<p>You have been invited to the meeting: "{{ notification.meeting.title }}"</p>
+<p>Date: {{ notification.meeting.date }}</p>
+<p>Time: {{ notification.meeting.start_time }} - {{ notification.meeting.end_time }}</p>
+
+<form method="POST">
+    {% csrf_token %}
+    <label>
+        <input type="radio" name="status" value="Accepted" required> Accept
+    </label><br>
+    <label>
+        <input type="radio" name="status" value="Declined" required> Decline
+    </label><br>
+
+    <div id="reason-section" style="display: none;">
+        <label for="reason">Reason for declining:</label><br>
+        <textarea name="reason" rows="4" cols="50"></textarea><br>
+    </div>
+
+    <button type="submit">Submit</button>
+</form>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const declineRadioButton = document.querySelector('input[value="Declined"]');
+        const acceptRadioButton = document.querySelector('input[value="Accepted"]');
+        const reasonSection = document.getElementById('reason-section');
+
+        function toggleReasonSection() {
+            reasonSection.style.display = declineRadioButton.checked ? 'block' : 'none';
+        }
+
+        // Run on page load in case "Declined" is preselected
+        toggleReasonSection();
+
+        // Add event listeners
+        declineRadioButton.addEventListener('change', toggleReasonSection);
+        acceptRadioButton.addEventListener('change', toggleReasonSection);
+    });
+</script>
+
+{% endblock %}

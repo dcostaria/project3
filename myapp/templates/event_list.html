@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Events</h1>
+<div id='calendar'></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        editable: true,
+        selectable: true,
+        events: '/calendar/events/', // URL to fetch events from your Django backend
+        select: function(info) {
+            var title = prompt('Enter event title:');
+            if (title) {
+                fetch('/calendar/events/create/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({
+                        title: title,
+                        start: info.startStr,
+                        end: info.endStr
+                    })
+                }).then(response => response.json()).then(data => {
+                    calendar.refetchEvents();
+                });
+            }
+            calendar.unselect();
+        },
+        eventDrop: function(info) {
+            fetch('/calendar/events/update/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({
+                    id: info.event.id,
+                    start: info.event.start.toISOString(),
+                    end: info.event.end.toISOString()
+                })
+            }).then(response => response.json()).then(data => {
+                calendar.refetchEvents();
+            });
+        }
+    });
+
+    calendar.render();
+});
+</script>
+{% endblock %}

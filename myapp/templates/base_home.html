@@ -1,0 +1,283 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Schedulix Dashboard{% endblock %}</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4895ef;
+            --dark: #1a237e;
+            --light: #f8f9fa;
+            --success: #4cc9f0;
+            --warning: #f8961e;
+            --danger: #f72585;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: #f0f2f5;
+            color: #333;
+            transition: all 0.3s ease;
+            overflow-x: hidden;
+        }
+        
+        /* Sidebar - Gradient Modern */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 260px;
+            height: 100vh;
+            background: linear-gradient(135deg, var(--dark), var(--secondary));
+            color: white;
+            padding: 25px 0;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sidebar .logo {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+        
+        .logo img {
+            width: 160px;
+            margin-bottom: 10px;
+        }
+        
+        .logo-subtitle {
+            font-size: 12px;
+            opacity: 0.8;
+            letter-spacing: 1px;
+        }
+        
+        .sidebar ul {
+            list-style: none;
+            flex-grow: 1;
+        }
+        
+        .sidebar ul li {
+            margin: 5px 15px;
+        }
+        
+        /* Sidebar links */
+        .nav-link {
+            display: flex;
+            align-items: center;
+            color: white !important; /* Ensures static white text */
+            text-decoration: none;
+            padding: 12px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .nav-link i {
+            margin-right: 12px;
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+        
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+        
+        .nav-link.logout {
+            color: #ff6b6b;
+        }
+        
+    
+        .badge-pulse {
+            background: var(--danger);
+            color: white;
+            border-radius: 50%;
+            padding: 3px 8px;
+            font-size: 11px;
+            margin-left: auto;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .sidebar-footer {
+            padding: 15px 20px;
+            font-size: 12px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Main Content - Glassmorphism */
+        .main-content {
+            margin-left: 260px;
+            padding: 30px;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+        
+        .toggle-btn {
+            position: fixed;
+            top: 20px;
+            left: 270px;
+            background: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            z-index: 999;
+            transition: all 0.3s ease;
+        }
+        
+        .toggle-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .welcome-message {
+            background: linear-gradient(135deg, var(--accent), var(--success));
+            color: white;
+            padding: 40px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.2);
+            text-align: center;
+        }
+        
+        .welcome-message h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .welcome-message h5 {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+        
+        .cta-button {
+            background: white;
+            color: var(--primary);
+            border: none;
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .toggle-btn {
+                left: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <img src="{% static 'logo.png' %}" alt="Schedulix">
+            <p class="logo-subtitle">Smart Scheduling</p>
+        </div>
+        <ul>
+            {% if user.is_staff %}
+                <li><a href="{% url 'month' %}" class="nav-link"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a></li>
+                <li><a href="{% url 'manage_appointments' %}" class="nav-link"><i class="fas fa-tasks"></i> <span>Appointments</span></a></li>
+                <li><a href="{% url 'add_time_slot' %}" class="nav-link"><i class="fas fa-calendar-plus"></i> <span>Add Slots</span></a></li>
+                <li><a href="{% url 'admin:index' %}" class="nav-link"><i class="fas fa-cogs"></i> <span>Admin</span></a></li>
+            {% else %}
+                <li><a href="{% url 'home' %}" class="nav-link"><i class="fas fa-home"></i> <span>Home</span></a></li>
+                <li><a href="{% url 'book_appointment' %}" class="nav-link"><i class="fas fa-calendar-check"></i> <span>New Booking</span></a></li>
+                <li>
+                    <a href="{% url 'notifications' %}" class="nav-link">
+                        <i class="fas fa-bell"></i> <span>Notifications</span>
+                        {% if unread_notifications_count > 0 %}
+                            <span class="badge-pulse">{{ unread_notifications_count }}</span>
+                        {% endif %}
+                    </a>
+                </li>
+            {% endif %}
+            <li><a href="{% url 'logout_confirm' %}" class="nav-link logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <p>Need help? <a href="#" style="color: var(--success);">Contact Support</a></p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="toggle-btn" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </div>
+        
+        <div class="welcome-message">
+            <h1>Welcome back, {{ user.username }}! 👋</h1>
+            <h5>Your personalized scheduling dashboard</h5>
+        </div>
+        
+        {% block content %}{% endblock %}
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('open');
+        }
+    </script>
+    
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

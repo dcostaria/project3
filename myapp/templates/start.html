@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>start page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            overflow: hidden; /* Prevent scrolling */
+        }
+
+        header {
+            position: relative;
+            height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1646867821779-117d2f160f4f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') no-repeat center center/cover;
+        }
+
+        .hero-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: white;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 600px;
+        }
+
+        .logo {
+            font-size: 64px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            background: white;
+            color: #242582;
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 10px;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .get-started {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 18px;
+            color: white;
+            background-color: #242582;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .get-started:hover {
+            background-color: #1b1e6c;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="hero-section" id="hero-section">
+            <div class="hero-content">
+                <!--<div class="logo">Sd<sup>x</sup></div>-->
+                <h1>Experience the future of personal assistance with Schedulix</h1>
+                <p>A platform that empowers you to achieve your goals efficiently and effectively.</p>
+                <a href="{% url 'login' %}" class="get-started">Get Started</a>
+            </div>
+        </div>
+    </header>
+</body>
+</html>

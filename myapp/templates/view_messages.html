@@ -1,0 +1,79 @@
+{% extends 'base_home.html' %}
+
+{% block content %}
+<h1>Meeting Messages</h1>
+
+{% if messages %}
+    <ul>
+        {% for message in messages %}
+            <li>
+                <p>{{ message.message }}</p>
+                <p>Meeting: {{ message.meeting.title }}</p>
+                <p>Date: {{ message.meeting.date }} at {{ message.meeting.start_time }}</p>
+
+                <!-- Display summarized response after submission -->
+                {% if message.meeting.invitations.first.status %}
+                    <p style="color: {% if message.meeting.invitations.first.status == 'Accepted' %}green{% else %}red{% endif %};">
+                        You {{ message.meeting.invitations.first.status|lower }} the meeting invite for "{{ message.meeting.title }}" on {{ message.meeting.date }} at {{ message.meeting.start_time }}.
+                    </p>
+                {% endif %}
+
+                <form method="post" onsubmit="return validateForm(this);">
+                    {% csrf_token %}
+                    <input type="hidden" name="invitation_id" value="{{ message.meeting.invitations.first.id }}">
+
+                    <label>
+                        <input type="radio" name="status" value="Accepted" required onclick="toggleReasonBox(this)"> Accept
+                    </label>
+                    <label>
+                        <input type="radio" name="status" value="Declined" required onclick="toggleReasonBox(this)"> Decline
+                    </label>
+
+                    <div id="reason-box-{{ message.meeting.invitations.first.id }}" style="display: none;">
+                        <label>Reason for Declining:</label>
+                        <textarea name="decline_reason" rows="3"></textarea>
+                    </div>
+
+                    <button type="submit">Submit</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>You have no new messages.</p>
+{% endif %}
+
+<script>
+    function toggleReasonBox(radio) {
+        let form = radio.closest('form');
+        let reasonBox = form.querySelector('div[id^="reason-box"]');
+        let reasonInput = form.querySelector('textarea[name="decline_reason"]');
+
+        if (radio.value === "Declined") {
+            reasonBox.style.display = "block";
+            reasonInput.setAttribute("required", "true");  // Make reason mandatory
+        } else {
+            reasonBox.style.display = "none";
+            reasonInput.removeAttribute("required");  // Remove requirement if accepting
+        }
+    }
+
+    function validateForm(form) {
+        let selectedOption = form.querySelector('input[name="status"]:checked');
+        let reasonInput = form.querySelector('textarea[name="decline_reason"]');
+
+        if (!selectedOption) {
+            alert("Please select either Accept or Decline.");
+            return false;
+        }
+
+        if (selectedOption.value === "Declined" && reasonInput.value.trim() === "") {
+            alert("Please provide a reason for declining.");
+            return false;
+        }
+
+        return true;
+    }
+</script>
+
+{% endblock %}

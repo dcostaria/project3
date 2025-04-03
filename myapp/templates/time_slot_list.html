@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Slot List</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fb; /* Lighter blue-gray background */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+            color: #003366; /* Dark blue text */
+            flex-direction: column; /* Stack elements vertically */
+        }
+
+        h1 {
+            color: #003366; /* Dark blue */
+            text-align: center;
+            font-size: 2rem;
+        }
+
+        /* Welcome Message */
+        .welcome-message {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 2.5rem;
+            color: #007bff; /* Bright blue */
+            font-weight: bold;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Container */
+        .container {
+            width: 90%;
+            max-width: 800px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 30px; /* Adds space between the welcome message and the container */
+        }
+
+        /* Time Slot List */
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #f0f8ff; /* Light blue background */
+            border-left: 5px solid #007bff; /* Blue left border */
+            border-radius: 4px;
+        }
+
+        li:hover {
+            background-color: #e6f2ff; /* Lighter hover color */
+        }
+
+        /* Add Button */
+        a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff; /* Blue background */
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            text-align: center;
+        }
+
+        a:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+
+        /* Empty List Message */
+        li.no-slots {
+            text-align: center;
+            color: #888;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Welcome Message -->
+    <div class="welcome-message">Welcome to Schedulix</div>
+
+    <div class="container">
+        <h1>Time Slot List</h1>
+        <ul>
+            {% for time_slot in time_slots %}
+                <li>{{ time_slot.admin }} - {{ time_slot.day_of_week }}: {{ time_slot.start_time }} to {{ time_slot.end_time }}</li>
+            {% empty %}
+                <li class="no-slots">No time slots available.</li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'add_time_slot' %}">Add New Time Slot</a>
+    </div>
+
+</body>
+</html>

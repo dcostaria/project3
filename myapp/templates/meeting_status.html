@@ -1,0 +1,32 @@
+{% extends 'base_home.html' %}
+
+{% block content %}
+<h1>Meeting Responses</h1>
+
+{% for meeting in meetings %}
+    <h2>{{ meeting.title }}</h2>
+    <table border="1" cellpadding="10" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Invitee</th>
+                <th>Status</th>
+                <th>Reason for Declining</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for invitation in meeting.invitations.all %}
+                <tr>
+                    <td>{{ invitation.invitee.username }}</td>
+                    <td>{{ invitation.status }}</td>
+                    <td>{{ invitation.decline_reason|default:"-" }}</td>
+                </tr>
+
+            {% endfor %}
+        </tbody>
+    </table>
+    <button type="submit" >Schedule</button>
+                        <button type="submit" >Cancle</button>
+    <br>
+{% endfor %}
+
+{% endblock %}
